@@ -14,13 +14,13 @@ def project_to_su2(matrix):
         return I
     return matrix / np.sqrt(det)
 
-def calculate_giro_from_position_angle(cx, cy, r, Nx, Ny, n_L):
+def calculate_spin_from_position_angle(cx, cy, r, Nx, Ny, n_L):
     """
-    Calcula el giro basándose en el cambio de ángulo de la posición.
+    Calculates the spin based on the change in position angle.
     """
     cx = int(round(cx)); cy = int(round(cy))
     pts = []
-    # Bucle de contorno corregido
+    # Corrected contour loop
     for j in range(cy - r, cy + r + 1): pts.append(((cx - r) % Nx, j % Ny))
     for i in range(cx - r + 1, cx + r + 1): pts.append((i % Nx, (cy + r) % Ny))
     for j in range(cy + r - 1, cy - r - 1, -1): pts.append(((cx + r) % Nx, j % Ny))
@@ -55,20 +55,20 @@ def plot_and_save_phase(U, title, filename):
     plt.figure(figsize=(8, 8))
     phase = np.angle(U[:, :, 0, 0])
     plt.imshow(phase, cmap='hsv', origin='lower')
-    plt.colorbar(label='Fase')
+    plt.colorbar(label='Phase')
     plt.title(title)
     plt.savefig(filename)
     plt.close()
 
 # --- 3. Main Simulation Function ---
 def run_simulation(name, n_L, damping_factor, num_steps, Nx, Ny, noise_amplitude):
-    print(f"\n--- Iniciando simulación para el {name} ---")
+    print(f"\n--- Starting simulation for {name} ---")
 
     # --- Field Initialization with n_L Vortex ---
     U = np.zeros((Nx, Ny, 2, 2), dtype=complex)
     cx, cy = Nx / 2 - 0.5, Ny / 2 - 0.5
 
-    print(f"Inicializando campo 2D con vórtice de carga={n_L}...")
+    print(f"Initializing 2D field with vortex charge={n_L}...")
     i_idx, j_idx = np.meshgrid(np.arange(Nx), np.arange(Ny), indexing='ij')
     x_dist, y_dist = i_idx - cx, j_idx - cy
 
@@ -82,16 +82,16 @@ def run_simulation(name, n_L, damping_factor, num_steps, Nx, Ny, noise_amplitude
     r2 = x_dist**2 + y_dist**2
     U[r2 < 1.0] = np.zeros((2, 2))
     
-    # Guarda la imagen de la fase inicial
-    plot_and_save_phase(U, f"Fase Inicial ({name})", f"{name}_fase_inicial.png")
+    # Saves the initial phase image
+    plot_and_save_phase(U, f"Initial Phase ({name})", f"{name}_initial_phase.png")
 
     # --- Relaxation Loop ---
-    print("Iniciando simulación de relajación...")
+    print("Starting relaxation simulation...")
     energy_history = []
     
-    initial_giro = calculate_giro_from_position_angle(cx, cy, r=min(Nx, Ny)//4, Nx=Nx, Ny=Ny, n_L=n_L)
+    initial_spin = calculate_spin_from_position_angle(cx, cy, r=min(Nx, Ny)//4, Nx=Nx, Ny=Ny, n_L=n_L)
     initial_energy = compute_energy_xy_vectorized(U)
-    print(f"Paso 0/{num_steps} | Energía: {initial_energy:.6f} | Giro: {initial_giro:.4f}")
+    print(f"Step 0/{num_steps} | Energy: {initial_energy:.6f} | Spin: {initial_spin:.4f}")
 
     for step in range(1, num_steps + 1):
         U_left = np.roll(U, 1, axis=0)
@@ -114,22 +114,22 @@ def run_simulation(name, n_L, damping_factor, num_steps, Nx, Ny, noise_amplitude
         
         if step % (num_steps / 10) == 0:
             energy = compute_energy_xy_vectorized(U)
-            giro = calculate_giro_from_position_angle(cx, cy, r=min(Nx, Ny)//4, Nx=Nx, Ny=Ny, n_L=n_L)
-            print(f"Paso {step}/{num_steps} | Energía: {energy:.6f} | Giro: {giro:.4f}")
+            spin = calculate_spin_from_position_angle(cx, cy, r=min(Nx, Ny)//4, Nx=Nx, Ny=Ny, n_L=n_L)
+            print(f"Step {step}/{num_steps} | Energy: {energy:.6f} | Spin: {spin:.4f}")
 
     # --- Final Results ---
     final_energy = compute_energy_xy_vectorized(U)
-    final_giro = calculate_giro_from_position_angle(cx, cy, r=min(Nx, Ny)//4, Nx=Nx, Ny=Ny, n_L=n_L)
+    final_spin = calculate_spin_from_position_angle(cx, cy, r=min(Nx, Ny)//4, Nx=Nx, Ny=Ny, n_L=n_L)
     residual_variance = np.var(energy_history)
     
-    # Guarda la imagen de la fase final
-    plot_and_save_phase(U, f"Fase Final ({name})", f"{name}_fase_final.png")
+    # Saves the final phase image
+    plot_and_save_phase(U, f"Final Phase ({name})", f"{name}_final_phase.png")
 
     print("------------------------------")
-    print(f"Simulación de {name} completada.")
-    print(f"Energía final: {final_energy:.6f}")
-    print(f"Giro: {final_giro:.4f}")
-    print(f"Varianza Residual de la Energía: {residual_variance:.6f}")
+    print(f"Simulation of {name} completed.")
+    print(f"Final energy: {final_energy:.6f}")
+    print(f"Spin: {final_spin:.4f}")
+    print(f"Residual Energy Variance: {residual_variance:.6f}")
 
 # --- 4. Main Execution Block ---
 if __name__ == "__main__":
