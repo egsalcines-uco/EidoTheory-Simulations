@@ -15,6 +15,7 @@ This work explores a new physical ontology based on a fundamental field of discr
 ## Key Results from the Simulations
 
 * The 1D simulation confirms that non-trivial configurations of the Eido field are stable under a relaxation dynamic.
+* The 2D simulation demonstrates how the relaxation of a topological vortex can be used to calculate a correction term analogous to the anomalous magnetic moment, a key phenomenon in quantum electrodynamics.
 * The 3D simulation, using the electron mass as a single calibration point, predicts the masses of the muon and tau with an accuracy greater than 99.8%.
 * The results suggest a fundamental relationship: $M \approx n_L \cdot M_e$, where $M$ is the particle mass, $M_e$ is the electron mass, and $n_L$ is a topological winding number.
 
