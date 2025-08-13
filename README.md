@@ -36,6 +36,7 @@ How to Run
      git clone https://github.com/[Tu_Usuario]/EidoTheory-Simulations.git
      ```
   2. Navigate to the repository directory.
+  
   3. To run the 1D simulation:
      ```bash
      python eido_1d_relaxation.py
@@ -44,10 +45,10 @@ How to Run
      ```bash
      python eido_2d_stability_anom.py
      ```
-  5.To run the 3D mass prediction simulation:
-    ```bash
-    python eido_3d_mass_prediction.py
-    ```
+  5. To run the 3D simulation:
+     ```bash
+     python eido_3d_mass_prediction.py
+     ```
 ### License 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
