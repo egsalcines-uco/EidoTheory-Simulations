@@ -9,6 +9,7 @@ This work explores a new physical ontology based on a fundamental field of discr
 ## Project Structure
 
 * `eido_1d_relaxation.py`: A simulation that demonstrates the stability of a topological vortex (an eido) in a simplified one-dimensional angular field. It shows that the winding number `n` is a conserved quantity.
+* `eido_2d_stability_anom.py`: A simulation that explores the stability of topological vortices in a two-dimensional angular field and calculates the anomalous magnetic moment of the electron. It demonstrates how these topological defects can give rise to a correction term, which is analogous to the Schwinger correction.
 * `eido_3d_mass_prediction.py`: A conceptual simulation that calculates the mass hierarchy of leptons (muon and tau) by approximating a volume integral over a 3D angular field. It uses the electron's mass to calibrate a coupling constant and successfully predicts the other masses with high accuracy.
 
 ## Key Results from the Simulations
@@ -39,7 +40,11 @@ How to Run
      ```bash
      python eido_1d_relaxation.py
      ```
-  4.To run the 3D mass prediction simulation:
+  4. To run the 2D simulation:
+     ```bash
+     python eido_2d_stability_anom.py
+     ```
+  5.To run the 3D mass prediction simulation:
     ```bash
     python eido_3d_mass_prediction.py
     ```
